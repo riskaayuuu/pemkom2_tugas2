@@ -22,7 +22,7 @@ public class InventoryApp extends javax.swing.JFrame {
     private JButton btnTambah;
     private JTable table;
     private DefaultTableModel model;
-    private List<Barang<?>> daftarBarang = new ArrayList<>();
+    private List<Barang<? extends Number>> daftarBarang = new ArrayList<>();
     /**
      * Creates new form InventoryApp
      */
@@ -185,7 +185,7 @@ public class InventoryApp extends javax.swing.JFrame {
                         .addComponent(btn_Hapus)
                         .addGap(44, 44, 44)
                         .addComponent(btn_Tambah)))
-                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, 30, Short.MAX_VALUE)
+                .addPreferredGap(javax.swing.LayoutStyle.ComponentPlacement.RELATED, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
                 .addComponent(jScrollPane1, javax.swing.GroupLayout.PREFERRED_SIZE, 501, javax.swing.GroupLayout.PREFERRED_SIZE))
         );
         jPanel1Layout.setVerticalGroup(
@@ -222,7 +222,10 @@ public class InventoryApp extends javax.swing.JFrame {
         getContentPane().setLayout(layout);
         layout.setHorizontalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
-            .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+            .addGroup(layout.createSequentialGroup()
+                .addGap(18, 18, 18)
+                .addComponent(jPanel1, javax.swing.GroupLayout.DEFAULT_SIZE, javax.swing.GroupLayout.DEFAULT_SIZE, Short.MAX_VALUE)
+                .addContainerGap())
         );
         layout.setVerticalGroup(
             layout.createParallelGroup(javax.swing.GroupLayout.Alignment.LEADING)
@@ -270,12 +273,18 @@ public class InventoryApp extends javax.swing.JFrame {
     
     private void tambahData() {
         int nomorUrut = model.getRowCount() + 1; // Biar nomor selalu urut
-        String idBarang = txtId.getText();
-        String namaBarang = txtNama.getText();
-        String jumlahStok = txtJumlah.getText();
-        String harga = txtHarga.getText();
-
-        model.addRow(new Object[]{nomorUrut, idBarang, namaBarang, jumlahStok, harga});
+        String id = JOptionPane.showInputDialog("Masukkan ID Barang:");
+        String nama = JOptionPane.showInputDialog("Masukkan Nama Barang:");
+        String jumlahStr = JOptionPane.showInputDialog("Masukkan Jumlah Stok:");
+        String hargaStr = JOptionPane.showInputDialog("Masukkan Harga Barang:");
+        
+        try {
+            int jumlah = Integer.parseInt(jumlahStr);
+            double harga = Double.parseDouble(hargaStr);
+            tambahData(id, nama, jumlah, harga);
+        } catch (NumberFormatException e) {
+            JOptionPane.showMessageDialog(this, "Input jumlah dan harga harus berupa angka!", "Error", JOptionPane.ERROR_MESSAGE);
+        }
     }
 
     
